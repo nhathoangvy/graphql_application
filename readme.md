@@ -62,3 +62,36 @@ cargo install deno --locked
     docker build -t deno_app -f Dockerfile . 
     docker run -d -p 8088:8088 -e PORT="8088" -e ENV="STAGING" --name="application" app_container
 ```
+
+### Postman test api
+
+Create Column
+```
+curl --location --request POST 'http://localhost:8088/graphql' \
+--header 'Content-Type: application/json' \
+--data-raw '{"query":"mutation {createColumn(name: \"New_col\", order: 10) {... on MessageOptions {code,\n           message}   ... on Column {id,name,order,created,updated}}}}","variables":{"input":"a7c9a3b6-4806-4cd3-8ffa-995cbcb605b2"}}'
+```
+
+List Column
+```
+curl --location --request POST 'http://localhost:8088/graphql' \
+--header 'Content-Type: application/json' \
+--data-raw '{"query":"query {columns {id,name,order,created,updated}}","variables":{"input":"a7c9a3b6-4806-4cd3-8ffa-995cbcb605b2"}}'
+```
+
+Similiar with Card, Archive ...etc....
+List API:
+```
+  findColumnId(id) -> Column
+  columns() -> [Column]
+
+  createColumn(name, order) -> Column
+  updateColumn(id, name, order) -> Message
+  removeColumn(id) -> Message
+  
+  findCardId(id) -> Card
+  cards -> [Card]
+  createCard(name, description, order, status, columnName) -> Card
+  updateCard(id, name, description, order, status, columnName) -> Message
+  archiveCard(id, status) -> Message
+```
