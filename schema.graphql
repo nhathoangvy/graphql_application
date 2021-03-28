@@ -1,0 +1,51 @@
+type MessageOptions {
+  code: Int!,
+  message: String!
+}
+
+type Column {
+  id: String!,
+  name: String,
+  order: Int,
+  cards: [Card],
+  created: String,
+  updated: String
+}
+
+union ColumnResult = Column | MessageOptions
+
+enum STATUS {
+  ACTIVE,
+  INACTIVE,
+  ARCHIVED
+}
+
+type Card {
+  id: String!,
+  columnId: String!,
+  name: String!,
+  description: String,
+  order: Int!,
+  status: STATUS,
+  created: String,
+  updated: String
+}
+
+union CardResult = Card | MessageOptions
+
+type Query {
+  findColumnId(id: String): Column
+  columns: [Column]
+  findCardId(id: String): Card
+  cards: [Card]
+}
+
+type Mutation {
+  createColumn(name: String!, order: Int!): ColumnResult
+  updateColumn(id: String!, name: String!, order: Int!): MessageOptions
+  removeColumn(id: String!): MessageOptions
+  
+  createCard(name: String!, description: String, order: Int!, status: STATUS!, columnName: String!): CardResult
+  updateCard(id: String!, name: String, description: String, order: Int, status: STATUS, columnName: String): MessageOptions
+  archiveCard(id: String!, status: STATUS!): MessageOptions
+}
